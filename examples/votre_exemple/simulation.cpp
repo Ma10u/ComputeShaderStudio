@@ -1,5 +1,3 @@
-#include <math.h>
-
 #define VIDE 0xFF000000
 #define OBJ 0xFFFFFFFF
 
@@ -37,8 +35,9 @@ double dirNearestObject(uint x, uint y)
                     min = dist;
                     //calcul angle theoreme Al Kashi
                     dist2 = sqrt((i-x+1)*(i-x+1)+(j-y)*(j-y));
-                    dir = (((dist*dist)+1-(dist2*dist2))) / (2*dist)
-                    dir = acos(dir);
+                    dir = (((dist*dist)+1-(dist2*dist2))) / (2*dist);
+                    //approximation de arcos parcequ'on ne peut pas utiliser include <math.h>
+                    dir = sqrt(2-2*dir)+(sqrt(2-2*dir)*(1-dir))/11;
                 }
             }
         }
