@@ -1,16 +1,17 @@
 #define VIDE 0xFF000000
-#define OBJ 0xFFFFFFFF
+#define HEXA 4278190080
 
 void createObject(uint x, uint y, int masse)
 {
     uint p;
+    int taille = 1 + masse / 100000;
 
-    for (int i = 0; i < masse; i++)
+    for (int i = 0; i < taille; i++)
     {
-        for (int j = 0; j < masse; j++)
+        for (int j = 0; j < taille; j++)
         {
             p = (x+i) + (y+j) * WSX;
-            data_0[p] = OBJ;
+            data_0[p] = HEXA + masse;
         }
     }
 }
@@ -27,7 +28,7 @@ double dirNearestObject(uint x, uint y)
         for (int j = 0; j < WSY; j++)
         {
             p = x + y * WSX;
-            if(data_0[p] == OBJ)
+            if(data_0[p] != VIDE)
             {
                 dist = sqrt((i-x)*(i-x)+(j-y)*(j-y));
                 if (dist < min)
@@ -56,19 +57,20 @@ void main()
 	if (step == 0)
 	{
 		data_0[p] = VIDE;
-        createObject(100, 100, 10);
-        createObject(250, 350, 20);
+        createObject(100, 100, 100000);
+        createObject(250, 350, 8000000);
 	}
     // Simulation
     else
     {
-        if(data_0[p] == OBJ)
+        if(data_0[p] != VIDE)
         {
             double dir = dirNearestObject(x, y);
-            uint dx, dy;
+            uint dx = 0, dy = 0;
             if (dir < 45 || dir > 315) dx = 1;
             else if (dir > 135 && dir < 225) dx = -1;
-            //TODO
+            else if (dir > 225 && dir < 315) dy = 1;
+            else if (dir < 135 && dir > 45) dy = -1;
         }
     }
 }
